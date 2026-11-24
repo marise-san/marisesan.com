@@ -50,7 +50,7 @@ export interface Area {
   name: string;
   /** Uma linha no índice de áreas. */
   short: string;
-  featured?: FeaturedWork;
+  featured: FeaturedWork[];
   items: WorkItem[];
 }
 

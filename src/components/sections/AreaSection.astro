@@ -17,7 +17,9 @@ const k = kebab(area.key);
       <h2 id={headingId}>{area.name}</h2>
     </header>
 
-    {area.featured && <WorkFeature item={area.featured} area={area.key} />}
+    <div class="features">
+      {area.featured.map((f) => <WorkFeature item={f} area={area.key} />)}
+    </div>
 
     {area.items.length > 0 && (
       <div class="rows">
@@ -38,6 +40,7 @@ const k = kebab(area.key);
     border-bottom: 3px solid var(--color-text);
   }
   h2 { font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl)); }
+  .features { display: grid; gap: var(--space-6); }
   .rows { margin-top: var(--space-6); }
   .rows :global(.row:last-child) { border-bottom: 1px solid var(--color-border); }
   /* Ao passar o mouse em uma linha, as outras recuam. */

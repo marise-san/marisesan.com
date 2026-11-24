@@ -38,7 +38,7 @@ export const pt: SiteContent = {
       id: 'software',
       name: 'Software',
       short: '.NET, React e SQL Server, com arquitetura, testes, CI/CD e infraestrutura.',
-      featured: {
+      featured: [{
         title: 'Plataforma de operação de crédito',
         context: 'Credimil, 2026 até hoje',
         summary:
@@ -57,7 +57,7 @@ export const pt: SiteContent = {
             levels: ['End-to-end', 'Integração', 'Unitários'],
           },
         ],
-      },
+      }],
       items: [
         {
           title: 'Integração de leads e atendimento',
@@ -87,7 +87,7 @@ export const pt: SiteContent = {
       id: 'software-com-ia',
       name: 'Software com IA',
       short: 'Agentes de código configurados com o contexto do projeto: arquitetura, convenções e testes.',
-      featured: {
+      featured: [{
         title: 'Engenharia de contexto para agentes de código',
         context: 'Credimil',
         summary:
@@ -97,15 +97,40 @@ export const pt: SiteContent = {
           'Todas as entregas passam por revisão de código antes de produção.',
         ],
         tags: ['Claude Code', 'Plugins', 'Skills', 'Revisão de código'],
-      },
+      }],
       items: [],
     },
     {
       key: 'aiProducts',
       id: 'produtos-de-ia',
       name: 'Produtos de IA',
-      short: 'Aplicações com LLMs, machine learning e processamento de dados, do modelo à API.',
-      featured: {
+      short: 'Sistemas multiagentes, LLMs e machine learning aplicados a dados de negócio.',
+      featured: [{
+        title: 'Agente de consulta a dados em linguagem natural',
+        context: 'Sete Tecnologia',
+        summary:
+          'Sistema multiagente que responde perguntas sobre os dados de um sistema: identifica as tabelas relevantes, gera e executa a consulta T‑SQL e analisa o resultado no contexto da pergunta.',
+        points: [
+          'Criei o catálogo de metadados (descrições de tabelas e colunas) indexado com Semantic Kernel Memory para a busca semântica.',
+          'Cada etapa tem um agente com papel e modelo próprios. A geração de SQL usa um modelo menor, especializado em código.',
+          'Execução isolada: usuário dedicado, somente leitura, e políticas no banco que bloqueiam comandos de escrita. Só o resultado da consulta volta para os agentes.',
+          'Memória das últimas cinco interações para manter o contexto da conversa.',
+        ],
+        tags: ['Semantic Kernel', 'DeepSeek Coder', 'MCP', 'T-SQL', 'Multiagentes'],
+        diagrams: [
+          {
+            kind: 'flow',
+            title: 'Arquitetura',
+            steps: [
+              { name: 'Pergunta', detail: 'Linguagem natural' },
+              { name: 'Orquestrador', detail: 'Busca semântica no catálogo de tabelas' },
+              { name: 'Geração de SQL', detail: 'DeepSeek Coder, T-SQL' },
+              { name: 'Execução', detail: 'Servidor MCP, somente leitura' },
+              { name: 'Análise', detail: 'Agente com contexto do negócio' },
+            ],
+          },
+        ],
+      }, {
         title: 'Argus',
         context: 'Projeto do MBA em IA Generativa',
         summary:
@@ -132,7 +157,7 @@ export const pt: SiteContent = {
             ],
           },
         ],
-      },
+      }],
       items: [
         {
           title: 'Análise de sentimentos com PySpark',
@@ -171,7 +196,7 @@ export const pt: SiteContent = {
         when: '2022 a 2026',
         title: 'Desenvolvedora de software',
         place: 'Sete Tecnologia',
-        text: 'Desenvolvimento de sistemas de controle de acesso integrados a hardware, de gestão de processos para prefeituras e de um ERP interno.',
+        text: 'Desenvolvimento de sistemas de controle de acesso integrados a hardware, de gestão de processos para prefeituras e de um ERP interno. Construção de um agente de IA para consultas a dados em linguagem natural.',
       },
       {
         when: 'Graduação',
@@ -185,7 +210,7 @@ export const pt: SiteContent = {
     groups: [
       { name: 'Back-end e dados', items: ['.NET', 'C#', 'ASP.NET', 'SQL Server', 'Python', 'FastAPI'] },
       { name: 'Front-end', items: ['React', 'Next.js', 'React Native'] },
-      { name: 'IA e dados', items: ['Claude Code', 'OpenAI SDK', 'Semantic Kernel', 'llama.cpp', 'scikit-learn', 'PySpark'] },
+      { name: 'IA e dados', items: ['Semantic Kernel', 'MCP', 'Claude Code', 'OpenAI SDK', 'llama.cpp', 'scikit-learn', 'PySpark'] },
       { name: 'Infraestrutura e automação', items: ['Azure', 'IIS', 'CI/CD', 'Docker', 'n8n', 'Airflow'] },
     ],
   },

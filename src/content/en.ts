@@ -38,7 +38,7 @@ export const en: SiteContent = {
       id: 'software',
       name: 'Software',
       short: '.NET, React and SQL Server, with architecture, testing, CI/CD and infrastructure.',
-      featured: {
+      featured: [{
         title: 'Credit operations platform',
         context: 'Credimil, 2026 to present',
         summary:
@@ -57,7 +57,7 @@ export const en: SiteContent = {
             levels: ['End-to-end', 'Integration', 'Unit'],
           },
         ],
-      },
+      }],
       items: [
         {
           title: 'Lead and customer service integration',
@@ -87,7 +87,7 @@ export const en: SiteContent = {
       id: 'ai-assisted-software',
       name: 'Software with AI',
       short: 'Coding agents set up with the project’s context: architecture, conventions and tests.',
-      featured: {
+      featured: [{
         title: 'Context engineering for coding agents',
         context: 'Credimil',
         summary:
@@ -97,15 +97,40 @@ export const en: SiteContent = {
           'Every change goes through code review before production.',
         ],
         tags: ['Claude Code', 'Plugins', 'Skills', 'Code review'],
-      },
+      }],
       items: [],
     },
     {
       key: 'aiProducts',
       id: 'ai-products',
       name: 'AI products',
-      short: 'Applications with LLMs, machine learning and data processing, from model to API.',
-      featured: {
+      short: 'Multi-agent systems, LLMs and machine learning applied to business data.',
+      featured: [{
+        title: 'Natural language data query agent',
+        context: 'Sete Tecnologia',
+        summary:
+          'Multi-agent system that answers questions about a system’s data: it finds the relevant tables, generates and runs the T‑SQL query and analyzes the result in the context of the question.',
+        points: [
+          'I built the metadata catalog (table and column descriptions) indexed with Semantic Kernel Memory for semantic search.',
+          'Each step has an agent with its own role and model. SQL generation uses a smaller, code-specialized model.',
+          'Isolated execution: a dedicated read-only user and database policies that block write commands. Only the query result goes back to the agents.',
+          'Memory of the last five interactions to keep conversation context.',
+        ],
+        tags: ['Semantic Kernel', 'DeepSeek Coder', 'MCP', 'T-SQL', 'Multi-agent'],
+        diagrams: [
+          {
+            kind: 'flow',
+            title: 'Architecture',
+            steps: [
+              { name: 'Question', detail: 'Natural language' },
+              { name: 'Orchestrator', detail: 'Semantic search over the table catalog' },
+              { name: 'SQL generation', detail: 'DeepSeek Coder, T-SQL' },
+              { name: 'Execution', detail: 'MCP server, read-only' },
+              { name: 'Analysis', detail: 'Agent with business context' },
+            ],
+          },
+        ],
+      }, {
         title: 'Argus',
         context: 'MBA in Generative AI project',
         summary:
@@ -132,7 +157,7 @@ export const en: SiteContent = {
             ],
           },
         ],
-      },
+      }],
       items: [
         {
           title: 'Sentiment analysis with PySpark',
@@ -171,7 +196,7 @@ export const en: SiteContent = {
         when: '2022 to 2026',
         title: 'Software developer',
         place: 'Sete Tecnologia',
-        text: 'Development of hardware-integrated access control systems, case management for city governments and an internal ERP.',
+        text: 'Development of hardware-integrated access control systems, case management for city governments and an internal ERP. Built an AI agent for natural language data queries.',
       },
       {
         when: 'Degree',
@@ -185,7 +210,7 @@ export const en: SiteContent = {
     groups: [
       { name: 'Back end and data', items: ['.NET', 'C#', 'ASP.NET', 'SQL Server', 'Python', 'FastAPI'] },
       { name: 'Front end', items: ['React', 'Next.js', 'React Native'] },
-      { name: 'AI and data', items: ['Claude Code', 'OpenAI SDK', 'Semantic Kernel', 'llama.cpp', 'scikit-learn', 'PySpark'] },
+      { name: 'AI and data', items: ['Semantic Kernel', 'MCP', 'Claude Code', 'OpenAI SDK', 'llama.cpp', 'scikit-learn', 'PySpark'] },
       { name: 'Infrastructure and automation', items: ['Azure', 'IIS', 'CI/CD', 'Docker', 'n8n', 'Airflow'] },
     ],
   },

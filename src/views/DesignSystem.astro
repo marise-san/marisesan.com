@@ -37,7 +37,7 @@ const paletteGroups = [
 const sizesPx = Object.entries(typeScale).map(([k, v]) => ({ k, v, px: Math.round(parseFloat(v) * 16) }));
 const areaContent = content.areas;
 const sampleItem = content.areas[2].items[0];
-const diagrams = content.areas.flatMap((a) => (a.featured?.diagrams ?? []).map((d) => ({ d, k: kebab(a.key) })));
+const diagrams = content.areas.flatMap((a) => a.featured.flatMap((f) => f.diagrams ?? []).map((d) => ({ d, k: kebab(a.key) })));
 const layersD = diagrams.find((x) => x.d.kind === 'layers');
 const pyramidD = diagrams.find((x) => x.d.kind === 'pyramid');
 const flowD = diagrams.find((x) => x.d.kind === 'flow');
