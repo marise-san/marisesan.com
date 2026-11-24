@@ -10,7 +10,7 @@ const { contact } = Astro.props.content;
     <h2 id="contact-title">{contact.title}</h2>
     <p>{contact.text}</p>
     <div class="actions">
-      <Button href="https://www.linkedin.com/in/marise-san/" variant="neon" external>{contact.primaryCta}</Button>
+      <span class="glow"><Button href="https://www.linkedin.com/in/marise-san/" variant="neon" external>{contact.primaryCta}</Button></span>
       <a class="secondary" href="https://github.com/marise-san" rel="me noopener">{contact.secondaryCta}</a>
     </div>
   </div>
@@ -22,7 +22,12 @@ const { contact } = Astro.props.content;
     color: var(--color-on-inverse);
     position: relative;
     overflow: hidden;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--color-on-inverse) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--color-on-inverse) 7%, transparent) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
   }
+  .glow { display: inline-block; filter: drop-shadow(var(--glow-software)); }
   /* As três cores das áreas fecham a página, como abriram. */
   .contact::before {
     content: "";

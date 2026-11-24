@@ -60,6 +60,7 @@ const t = ui[lang];
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
+    <div class="scroll-progress" aria-hidden="true"></div>
     <a class="skip-link" href="#conteudo">{t.skip}</a>
     <Header lang={lang} path={path} />
     <main id="conteudo">

@@ -1,0 +1,13 @@
+---
+/** Escolhe o componente de acordo com o tipo do diagrama. */
+import type { Diagram } from '../../content/types';
+import Layers from './Layers.astro';
+import Pyramid from './Pyramid.astro';
+import Flow from './Flow.astro';
+
+interface Props { diagram: Diagram }
+const { diagram } = Astro.props;
+---
+{diagram.kind === 'layers' && <Layers diagram={diagram} />}
+{diagram.kind === 'pyramid' && <Pyramid diagram={diagram} />}
+{diagram.kind === 'flow' && <Flow diagram={diagram} />}

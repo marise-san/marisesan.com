@@ -1,0 +1,116 @@
+---
+/**
+ * Terminal com digitação feita só em CSS.
+ * O comando é "digitado" com width em ch + steps(); as linhas de saída
+ * aparecem em sequência. Com movimento reduzido, tudo aparece de uma vez.
+ */
+import type { TerminalLine } from '../../content/types';
+
+interface Props {
+  label: string;
+  command: string;
+  lines: TerminalLine[];
+}
+const { label, command, lines } = Astro.props;
+const keyWidth = Math.max(...lines.map((l) => l.key.length)) + 1;
+---
+<div class="glow">
+  <figure class="terminal" aria-label={label} style={`--n: ${command.length}; --key: ${keyWidth}ch`}>
+    <div class="bar">
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="title">{label}</span>
+    </div>
+    <div class="body">
+      <p class="prompt"><span class="ps" aria-hidden="true">$</span><span class="cmd">{command}</span></p>
+      <ul class="out">
+        {lines.map((line, i) => (
+          <li style={`--i: ${i}`}>
+            <span class="k">{line.key}:</span>
+            {Array.isArray(line.value) ? (
+              <span class="v list"><span class="p">[</span>{line.value.map((v, j) => (
+                <>{j > 0 && <span class="p">, </span>}<span class="item">{v}</span></>
+              ))}<span class="p">]</span></span>
+            ) : (
+              <span class="v">{line.value}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p class="prompt end" style={`--i: ${lines.length}`} aria-hidden="true"><span class="ps">$</span><span class="cursor"></span></p>
+    </div>
+  </figure>
+</div>
+
+<style>
+  /* O filtro fica no invólucro para o brilho não ser cortado pelo clip-path. */
+  .glow { filter: drop-shadow(var(--glow-ai-assisted)); }
+
+  .terminal {
+    --cut: var(--cut-lg);
+    --type-time: calc(var(--n) * var(--typing-speed));
+    margin: 0;
+    background: var(--color-inverse);
+    color: var(--color-on-inverse);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.75;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-on-inverse) 14%, transparent);
+  }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 10px; height: 10px; display: block; }
+  .dots i:nth-child(1) { background: var(--area-software); }
+  .dots i:nth-child(2) { background: var(--area-ai-assisted); }
+  .dots i:nth-child(3) { background: var(--area-ai-products); }
+  .title { color: color-mix(in srgb, var(--color-on-inverse) 65%, transparent); }
+
+  .body { padding: var(--space-5); }
+  .prompt { margin: 0; display: flex; gap: 1ch; max-width: none; }
+  .ps { color: var(--area-software); text-shadow: var(--text-glow); }
+  .cmd { display: inline-block; white-space: nowrap; overflow: hidden; }
+
+  .out { list-style: none; padding: 0; margin: var(--space-2) 0; }
+  .out li { display: grid; grid-template-columns: var(--key) 1fr; column-gap: 1ch; }
+  .k { color: var(--area-software); }
+  .v { color: var(--color-on-inverse); }
+  .item { color: var(--area-ai-products); }
+  .p { color: color-mix(in srgb, var(--color-on-inverse) 50%, transparent); }
+
+  .cursor {
+    display: inline-block;
+    width: 1ch;
+    height: 1.2em;
+    margin-top: 0.25em;
+    background: var(--area-ai-assisted);
+    box-shadow: var(--glow-ai-assisted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cmd {
+      width: 0;
+      animation: type var(--type-time) steps(var(--n), end) 400ms forwards;
+    }
+    .out li, .end {
+      opacity: 0;
+      animation: show 1ms calc(400ms + var(--type-time) + 120ms + var(--i) * 110ms) forwards;
+    }
+    .cursor { animation: blink 1s steps(1, end) infinite; }
+
+    @keyframes type { to { width: calc(var(--n) * 1ch); } }
+    @keyframes show { to { opacity: 1; } }
+    @keyframes blink { 50% { opacity: 0; } }
+  }
+
+  @media (max-width: 480px) {
+    .terminal { font-size: var(--text-xs); }
+    .out li { grid-template-columns: max-content 1fr; }
+    .body { padding: var(--space-4); }
+  }
+</style>

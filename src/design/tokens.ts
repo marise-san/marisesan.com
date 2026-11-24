@@ -112,10 +112,23 @@ export const layout = {
   'gutter': 'clamp(1.25rem, 5vw, 3.5rem)',
 } as const;
 
+/**
+ * Efeitos para superfícies escuras. O brilho é misturado a partir da cor
+ * da área com color-mix, então acompanha qualquer troca de paleta.
+ */
+export const effects = {
+  'glow-software': '0 0 22px color-mix(in srgb, var(--area-software) 55%, transparent)',
+  'glow-ai-assisted': '0 0 22px color-mix(in srgb, var(--area-ai-assisted) 55%, transparent)',
+  'glow-ai-products': '0 0 22px color-mix(in srgb, var(--area-ai-products) 50%, transparent)',
+  'text-glow': '0 0 10px color-mix(in srgb, currentColor 60%, transparent)',
+  'grid-size': '32px',
+} as const;
+
 export const motion = {
   'ease-out': 'cubic-bezier(.2,.7,.2,1)',
   'duration-base': '180ms',
   'duration-slow': '700ms',
+  'typing-speed': '45ms',
 } as const;
 
 /** Converte os tokens em variáveis CSS para :root. */
@@ -132,6 +145,7 @@ export function tokensToCss(): string {
   for (const [key, value] of Object.entries(space)) lines.push(`--space-${key}:${value}`);
   for (const [key, value] of Object.entries(shape)) lines.push(`--${key}:${value}`);
   for (const [key, value] of Object.entries(layout)) lines.push(`--${key}:${value}`);
+  for (const [key, value] of Object.entries(effects)) lines.push(`--${key}:${value}`);
   for (const [key, value] of Object.entries(motion)) lines.push(`--${key}:${value}`);
   return `:root{${lines.join(';')}}`;
 }

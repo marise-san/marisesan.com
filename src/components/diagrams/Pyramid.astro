@@ -1,0 +1,52 @@
+---
+/**
+ * Pirâmide em CSS: cada nível é uma faixa trapezoidal (clip-path) cuja
+ * largura cresce do topo para a base. A largura vem do índice do nível.
+ */
+import type { PyramidDiagram } from '../../content/types';
+
+interface Props { diagram: PyramidDiagram }
+const { diagram } = Astro.props;
+const total = diagram.levels.length;
+---
+<figure class="pyramid" style={`--total: ${total}`}>
+  <figcaption>{diagram.title}</figcaption>
+  <ol>
+    {diagram.levels.map((level, i) => (
+      <li style={`--i: ${i}`}><span>{level}</span></li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .pyramid { margin: 0; }
+  figcaption {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+  ol {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    justify-items: center;
+  }
+  li {
+    /* Cada nível é mais largo que o anterior. */
+    width: calc(100% / var(--total) * (var(--i) + 1));
+    min-width: 9rem;
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    padding-inline: var(--space-4);
+    background: color-mix(in srgb, var(--area) calc(85% - var(--i) * 25%), var(--color-surface));
+    clip-path: polygon(var(--space-4) 0, calc(100% - var(--space-4)) 0, 100% 100%, 0 100%);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+</style>

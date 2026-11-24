@@ -4,8 +4,10 @@ import AreaMark from '../components/ui/AreaMark.astro';
 import Button from '../components/ui/Button.astro';
 import Tag from '../components/ui/Tag.astro';
 import WorkRow from '../components/work/WorkRow.astro';
+import Terminal from '../components/ui/Terminal.astro';
+import Diagram from '../components/diagrams/Diagram.astro';
 import { getContent } from '../content';
-import { palette, semanticColors, areas, fonts, typeScale, space, shape, kebab, type PaletteKey } from '../design/tokens';
+import { palette, semanticColors, areas, fonts, typeScale, space, shape, effects, kebab, type PaletteKey } from '../design/tokens';
 import { contrastRatio, wcagLevel } from '../lib/contrast';
 import type { Lang } from '../i18n';
 
@@ -34,7 +36,12 @@ const paletteGroups = [
 
 const sizesPx = Object.entries(typeScale).map(([k, v]) => ({ k, v, px: Math.round(parseFloat(v) * 16) }));
 const areaContent = content.areas;
-const sampleItem = content.areas[2].items[1];
+const sampleItem = content.areas[2].items[0];
+const diagrams = content.areas.flatMap((a) => (a.featured?.diagrams ?? []).map((d) => ({ d, k: kebab(a.key) })));
+const layersD = diagrams.find((x) => x.d.kind === 'layers');
+const pyramidD = diagrams.find((x) => x.d.kind === 'pyramid');
+const flowD = diagrams.find((x) => x.d.kind === 'flow');
+const glows = Object.keys(effects).filter((k) => k.startsWith('glow-'));
 const fmt = (n: number) => n.toFixed(2).replace('.', lang === 'pt' ? ',' : '.');
 ---
 <Base
@@ -175,6 +182,18 @@ const fmt = (n: number) => n.toFixed(2).replace('.', lang === 'pt' ? ',' : '.');
     </div>
   </section>
 
+  <section class="ds-section" aria-labelledby="ds-effects">
+    <div class="wrap">
+      <h2 id="ds-effects">{ds.sections.effects}</h2>
+      <p class="section-text">{ds.sections.effectsText}</p>
+      <ul class="glows">
+        {glows.map((g) => (
+          <li><span class="glow-chip" style={`box-shadow: var(--${g}); background: var(--area-${g.replace('glow-', '')})`}></span><code>--{g}</code></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <section class="ds-section last" aria-labelledby="ds-components">
     <div class="wrap">
       <h2 id="ds-components">{ds.sections.components}</h2>
@@ -204,8 +223,30 @@ const fmt = (n: number) => n.toFixed(2).replace('.', lang === 'pt' ? ',' : '.');
       </div>
 
       <div class="specimen wide">
+        <p class="label">{L.terminal}</p>
+        <div class="terminal-wrap"><Terminal {...content.hero.terminal} /></div>
+      </div>
+
+      <div class="specimens diagrams">
+        {layersD && <div class="specimen" style={`--area: var(--area-${layersD.k}); --area-deep: var(--area-${layersD.k}-deep)`}><p class="label">{L.layers}</p><Diagram diagram={layersD.d} /></div>}
+        {pyramidD && <div class="specimen" style={`--area: var(--area-${pyramidD.k}); --area-deep: var(--area-${pyramidD.k}-deep)`}><p class="label">{L.pyramid}</p><Diagram diagram={pyramidD.d} /></div>}
+      </div>
+      {flowD && (
+        <div class="specimen wide" style={`--area: var(--area-${flowD.k}); --area-deep: var(--area-${flowD.k}-deep)`}>
+          <p class="label">{L.flow}</p>
+          <Diagram diagram={flowD.d} />
+        </div>
+      )}
+
+      <div class="specimen wide">
+        <p class="label">{L.progress}</p>
+        <p class="muted small">{L.progressText}</p>
+        <div class="progress-demo" aria-hidden="true"><span></span></div>
+      </div>
+
+      <div class="specimen wide">
         <p class="label">{L.workItem}</p>
-        <WorkRow item={sampleItem} lang={lang} />
+        <WorkRow item={sampleItem} />
       </div>
     </div>
   </section>
@@ -273,6 +314,14 @@ const fmt = (n: number) => n.toFixed(2).replace('.', lang === 'pt' ? ',' : '.');
   .specimen .tag-list { margin-bottom: var(--space-5); }
   .row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
   .row.inverse { margin-top: var(--space-4); padding: var(--space-4); background: var(--color-inverse); }
+  .diagrams { margin-top: var(--space-4); }
+  .terminal-wrap { max-width: 34rem; }
+  .small { font-size: var(--text-sm); }
+  .progress-demo { height: 4px; background: var(--color-border); }
+  .progress-demo span { display: block; height: 100%; width: 62%; background: linear-gradient(90deg, var(--area-software) 0 33.33%, var(--area-ai-assisted) 33.33% 66.66%, var(--area-ai-products) 66.66% 100%); background-size: 161% 100%; }
+  .glows { list-style: none; padding: var(--space-6); margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-7); background: var(--color-inverse); color: var(--color-on-inverse); }
+  .glows li { display: grid; gap: var(--space-3); justify-items: start; }
+  .glow-chip { width: 72px; height: 40px; display: block; }
 
   @media (max-width: 820px) {
     .families, .specimens, .split { grid-template-columns: 1fr; }

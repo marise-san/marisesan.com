@@ -1,18 +1,15 @@
 ---
 /** Trabalho complementar de uma área, em linha. */
 import type { WorkItem } from '../../content/types';
-import { ui, type Lang } from '../../i18n';
 import Tag from '../ui/Tag.astro';
 
-interface Props { item: WorkItem; lang: Lang }
-const { item, lang } = Astro.props;
-const t = ui[lang];
+interface Props { item: WorkItem }
+const { item } = Astro.props;
 ---
 <article class="row">
   <div>
     <h3>{item.title}</h3>
     <p class="context">{item.context}</p>
-    {item.status === 'in-progress' && <p class="status">{t.inProgress}</p>}
   </div>
   <div>
     <p class="summary">{item.summary}</p>
@@ -25,27 +22,36 @@ const t = ui[lang];
 
 <style>
   .row {
+    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) minmax(0, 8rem);
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) minmax(0, 6rem);
     gap: var(--space-3) var(--space-7);
-    padding-block: var(--space-6);
+    padding: var(--space-6) var(--space-5);
     border-top: 1px solid var(--color-border);
+    transition: background-color var(--duration-base) var(--ease-out), opacity var(--duration-base) var(--ease-out);
   }
+  /* Faixa na cor da área, que cresce ao passar o mouse ou focar um link da linha. */
+  .row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    bottom: 0;
+    width: 4px;
+    background: var(--area, var(--area-software));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+  .row:hover, .row:focus-within { background: var(--color-surface); }
+  .row:hover::before, .row:focus-within::before { transform: scaleY(1); }
+
   h3 { font-size: var(--text-lg); }
   .context { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-  .status {
-    display: inline-block;
-    margin: var(--space-3) 0 0;
-    padding: 2px var(--space-2);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    background: var(--area-ai-products);
-    color: var(--color-text);
-  }
   .summary { font-size: var(--text-base); margin-bottom: var(--space-4); }
   .link { text-align: right; font-family: var(--font-display); font-weight: 600; font-size: var(--text-base); }
   @media (max-width: 820px) {
-    .row { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr; padding-inline: var(--space-4); }
     .link { text-align: left; }
   }
 </style>

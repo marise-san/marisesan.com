@@ -1,8 +1,9 @@
 ---
 import type { SiteContent } from '../../content/types';
+import { kebab } from '../../design/tokens';
 import AreaMark from '../ui/AreaMark.astro';
 import Button from '../ui/Button.astro';
-import { kebab } from '../../design/tokens';
+import Terminal from '../ui/Terminal.astro';
 
 interface Props { content: SiteContent }
 const { hero, areas, areasTitle } = Astro.props.content;
@@ -23,26 +24,44 @@ const { hero, areas, areasTitle } = Astro.props.content;
           <Button href="#areas" variant="ghost">{hero.secondaryCta}</Button>
         </div>
       </div>
-
-      <nav class="index" aria-label={areasTitle}>
-        <ol>
-          {areas.map((a) => (
-            <li>
-              <a href={`#${a.id}`}>
-                <AreaMark area={a.key} />
-                <span class="name">{a.name}</span>
-                <span class="short">{a.short}</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <Terminal {...hero.terminal} />
     </div>
+
+    <nav class="index" aria-label={areasTitle}>
+      <ol>
+        {areas.map((a) => (
+          <li style={`--c: var(--area-${kebab(a.key)})`}>
+            <a href={`#${a.id}`}>
+              <span class="name"><AreaMark area={a.key} size="sm" />{a.name}</span>
+              <span class="short">{a.short}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   </div>
 </section>
 
 <style>
-  .hero { padding-block: clamp(var(--space-7), 8vw, var(--space-9)) var(--space-6); }
+  .hero {
+    position: relative;
+    padding-block: clamp(var(--space-7), 7vw, var(--space-9)) var(--space-6);
+    isolation: isolate;
+  }
+  /* Grade de fundo, que se dissolve para baixo. */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    background-position: center top;
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 85%);
+    opacity: 0.7;
+  }
 
   .role {
     font-family: var(--font-display);
@@ -51,57 +70,84 @@ const { hero, areas, areasTitle } = Astro.props.content;
     color: var(--color-text-muted);
     margin-bottom: var(--space-3);
   }
-
   h1 {
-    font-size: clamp(var(--text-3xl), 10.5vw, 7.5rem);
+    font-size: clamp(var(--text-3xl), 10vw, 7.25rem);
     line-height: 0.92;
     letter-spacing: -0.02em;
-    text-wrap: nowrap;
   }
 
-  /* Três segmentos: as três áreas, apresentadas logo abaixo do nome. */
   .spectrum {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-2);
-    margin-block: var(--space-5) clamp(var(--space-7), 6vw, var(--space-8));
-    max-width: 42rem;
+    margin-block: var(--space-5) clamp(var(--space-6), 5vw, var(--space-8));
+    max-width: 40rem;
   }
   .spectrum span { height: 10px; background: var(--c); transform-origin: left; }
   @media (prefers-reduced-motion: no-preference) {
     .spectrum span { transform: scaleX(0); animation: draw var(--duration-slow) var(--ease-out) forwards; }
-    .spectrum span:nth-child(2) { animation-delay: 160ms; }
-    .spectrum span:nth-child(3) { animation-delay: 320ms; }
+    .spectrum span:nth-child(2) { animation-delay: 140ms; }
+    .spectrum span:nth-child(3) { animation-delay: 280ms; }
     @keyframes draw { to { transform: scaleX(1); } }
   }
 
   .grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(var(--space-6), 6vw, var(--space-9));
     align-items: start;
   }
   .lede { font-size: var(--text-lg); color: var(--color-text); margin-bottom: var(--space-6); }
   .actions { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); align-items: center; }
 
-  .index ol { list-style: none; padding: 0; border-top: 1px solid var(--color-border); }
-  .index li { border-bottom: 1px solid var(--color-border); }
-  .index a {
+  .index { margin-top: clamp(var(--space-7), 6vw, var(--space-9)); }
+  .index ol {
+    list-style: none;
+    padding: 0;
     display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: var(--space-4);
-    row-gap: var(--space-1);
-    padding-block: var(--space-4);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+  .index a {
+    --cut: var(--cut-md);
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    height: 100%;
+    padding: var(--space-5);
+    background: var(--color-surface);
     color: var(--color-text);
     text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+    overflow: hidden;
   }
-  .index :global(.mark) { grid-row: span 2; margin-top: 0.3em; }
-  .name { font-family: var(--font-display); font-weight: 700; font-size: var(--text-xl); line-height: 1.2; }
-  .short { color: var(--color-text-muted); font-size: var(--text-base); line-height: 1.5; }
-  .index a:hover .name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+  /* A cor da área sobe pelo cartão ao passar o mouse. */
+  .index a::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 4px;
+    background: var(--c);
+    transition: height var(--duration-base) var(--ease-out);
+    z-index: 0;
+  }
+  .index a:hover::before, .index a:focus-visible::before { height: 100%; }
+  .index a > * { position: relative; z-index: 1; }
+  .index a:focus-visible { clip-path: none; }
+  .name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+  .short { color: var(--color-text-muted); font-size: var(--text-base); line-height: 1.5; transition: color var(--duration-base); }
+  .index a:hover .short, .index a:focus-visible .short { color: var(--color-text); }
 
-  @media (max-width: 820px) {
-    .grid { grid-template-columns: 1fr; }
-    h1 { text-wrap: balance; }
+  @media (max-width: 900px) {
+    .grid, .index ol { grid-template-columns: 1fr; }
   }
 </style>

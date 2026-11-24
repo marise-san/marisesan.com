@@ -1,0 +1,89 @@
+---
+/**
+ * Fluxo em etapas. Horizontal em telas largas, vertical em telas estreitas.
+ * Conectores e numeração são feitos com pseudo-elementos e contadores CSS.
+ */
+import type { FlowDiagram } from '../../content/types';
+
+interface Props { diagram: FlowDiagram }
+const { diagram } = Astro.props;
+---
+<figure class="flow" style={`--steps: ${diagram.steps.length}`}>
+  <figcaption>{diagram.title}</figcaption>
+  <ol>
+    {diagram.steps.map((step) => (
+      <li>
+        <span class="name">{step.name}</span>
+        <span class="detail">{step.detail}</span>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .flow { margin: 0; container-type: inline-size; }
+  figcaption {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+  ol {
+    --gap: var(--space-6);
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--steps), minmax(0, 1fr));
+    gap: var(--gap);
+    counter-reset: step;
+  }
+  li {
+    --cut: var(--cut-sm);
+    position: relative;
+    counter-increment: step;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: var(--color-bg);
+    border-top: 3px solid var(--area);
+    transition: background-color var(--duration-base) var(--ease-out);
+  }
+  li::before {
+    content: counter(step, decimal-leading-zero);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--area-deep);
+    margin-bottom: var(--space-1);
+  }
+  /* Conector entre etapas: linha + ponta de seta. */
+  li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 5px);
+    right: calc(var(--gap) * -1 + 4px);
+    width: calc(var(--gap) - 8px);
+    height: 10px;
+    background:
+      linear-gradient(var(--area-deep), var(--area-deep)) left center / calc(100% - 6px) 2px no-repeat,
+      conic-gradient(from -135deg at right, var(--area-deep) 90deg, transparent 0) right center / 6px 10px no-repeat;
+  }
+  li:hover { background: color-mix(in srgb, var(--area) 18%, var(--color-bg)); }
+  .name { display: block; font-family: var(--font-display); font-weight: 700; font-size: var(--text-base); line-height: 1.25; }
+  .detail { display: block; font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.4; margin-top: var(--space-1); }
+
+  /* Em contêiner estreito, o fluxo vira vertical e o conector aponta para baixo. */
+  @container (max-width: 560px) {
+    ol { grid-template-columns: 1fr; --gap: var(--space-5); }
+    li:not(:last-child)::after {
+      top: auto;
+      bottom: calc(var(--gap) * -1 + 3px);
+      right: auto;
+      left: var(--space-5);
+      width: 10px;
+      height: calc(var(--gap) - 6px);
+      background:
+        linear-gradient(var(--area-deep), var(--area-deep)) center top / 2px calc(100% - 6px) no-repeat,
+        conic-gradient(from 135deg at bottom, var(--area-deep) 90deg, transparent 0) center bottom / 10px 6px no-repeat;
+    }
+  }
+</style>

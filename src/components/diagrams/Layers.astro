@@ -1,0 +1,62 @@
+---
+/**
+ * Camadas concêntricas em HTML e CSS. Cada camada aninha a seguinte
+ * (renderização recursiva com Astro.self), e a cor fica mais intensa
+ * conforme se aproxima do centro.
+ */
+import type { LayersDiagram } from '../../content/types';
+
+interface Props {
+  diagram?: LayersDiagram;
+  /** Uso interno da recursão. */
+  layers?: LayersDiagram['layers'];
+  depth?: number;
+}
+const { diagram, depth = 0 } = Astro.props;
+const layers = Astro.props.layers ?? diagram?.layers ?? [];
+const [current, ...inner] = layers;
+---
+{diagram ? (
+  <figure class="layers">
+    <figcaption>{diagram.title}</figcaption>
+    <Astro.self layers={layers} depth={0} />
+  </figure>
+) : current && (
+  <div class="ring" style={`--depth: ${depth}`}>
+    <span class="ring-name">{current.name}</span>
+    <span class="ring-detail">{current.detail}</span>
+    {inner.length > 0 && <Astro.self layers={inner} depth={depth + 1} />}
+  </div>
+)}
+
+<style>
+  .layers { margin: 0; }
+  figcaption {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+  .ring {
+    --cut: var(--cut-md);
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    background: color-mix(in srgb, var(--area) calc(12% + var(--depth) * 18%), var(--color-surface));
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  }
+  .ring .ring { margin-top: var(--space-3); }
+  .ring-name {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-base);
+    line-height: 1.3;
+  }
+  .ring-detail {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text);
+    opacity: 0.75;
+  }
+</style>
