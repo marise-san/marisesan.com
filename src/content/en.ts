@@ -52,15 +52,6 @@ export const en: SiteContent = {
         tags: ['.NET', 'C#', 'React', 'SQL Server', 'Azure', 'CI/CD'],
         diagrams: [
           {
-            kind: 'layers',
-            title: 'Layers',
-            layers: [
-              { name: 'Presentation and infrastructure', detail: 'React, ASP.NET, SQL Server, Azure' },
-              { name: 'Application', detail: 'Use cases' },
-              { name: 'Domain', detail: 'Entities and business rules' },
-            ],
-          },
-          {
             kind: 'pyramid',
             title: 'Tests',
             levels: ['End-to-end', 'Integration', 'Unit'],
@@ -95,30 +86,17 @@ export const en: SiteContent = {
       key: 'aiAssisted',
       id: 'ai-assisted-software',
       name: 'Software with AI',
-      short: 'Claude Code set up with project plugins and skills for agent-assisted development.',
+      short: 'Coding agents set up with the project’s context: architecture, conventions and tests.',
       featured: {
-        title: 'Agent-assisted development environment',
+        title: 'Context engineering for coding agents',
         context: 'Credimil',
         summary:
-          'I set up Claude Code for Credimil’s system with plugins and skills that describe the project’s architecture, conventions and workflow. A new feature starts with the /nova-feature command and a description of what is needed.',
+          'I set up Claude Code for the company’s system, with plugins and skills that give the agent the project’s architecture, conventions and testing standards.',
         points: [
-          'The skills give the agent the project’s architecture and testing standards.',
-          'With this setup, a teammate with no .NET or React experience contributes to the system, focusing on business rules, data and tests.',
-          'I review every change before it reaches production.',
+          'The setup allowed people without experience in the stack to contribute to the system.',
+          'Every change goes through code review before production.',
         ],
         tags: ['Claude Code', 'Plugins', 'Skills', 'Code review'],
-        diagrams: [
-          {
-            kind: 'flow',
-            title: 'Feature workflow',
-            steps: [
-              { name: '/nova-feature', detail: 'Request description' },
-              { name: 'Project skills', detail: 'Architecture and conventions' },
-              { name: 'Implementation', detail: 'Code and tests' },
-              { name: 'Review', detail: 'Before production' },
-            ],
-          },
-        ],
       },
       items: [],
     },
@@ -191,9 +169,9 @@ export const en: SiteContent = {
       },
       {
         when: '2022 to 2026',
-        title: 'Intern to developer',
+        title: 'Software developer',
         place: 'Sete Tecnologia',
-        text: 'Hired full-time after three months as an intern and promoted three times. Hardware-integrated access control, case management for city governments and an internal ERP.',
+        text: 'Development of hardware-integrated access control systems, case management for city governments and an internal ERP.',
       },
       {
         when: 'Degree',

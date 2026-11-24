@@ -52,15 +52,6 @@ export const pt: SiteContent = {
         tags: ['.NET', 'C#', 'React', 'SQL Server', 'Azure', 'CI/CD'],
         diagrams: [
           {
-            kind: 'layers',
-            title: 'Camadas',
-            layers: [
-              { name: 'Apresentação e infraestrutura', detail: 'React, ASP.NET, SQL Server, Azure' },
-              { name: 'Aplicação', detail: 'Casos de uso' },
-              { name: 'Domínio', detail: 'Entidades e regras de negócio' },
-            ],
-          },
-          {
             kind: 'pyramid',
             title: 'Testes',
             levels: ['End-to-end', 'Integração', 'Unitários'],
@@ -95,30 +86,17 @@ export const pt: SiteContent = {
       key: 'aiAssisted',
       id: 'software-com-ia',
       name: 'Software com IA',
-      short: 'Claude Code configurado com plugins e skills do projeto para desenvolvimento com agentes.',
+      short: 'Agentes de código configurados com o contexto do projeto: arquitetura, convenções e testes.',
       featured: {
-        title: 'Ambiente de desenvolvimento com agentes',
+        title: 'Engenharia de contexto para agentes de código',
         context: 'Credimil',
         summary:
-          'Configurei o Claude Code para o sistema da Credimil com plugins e skills que descrevem a arquitetura, as convenções e o fluxo de trabalho do projeto. Uma nova funcionalidade começa com o comando /nova-feature e uma descrição do que precisa ser feito.',
+          'Configurei o Claude Code para o sistema da empresa, com plugins e skills que levam ao agente a arquitetura, as convenções e os padrões de teste do projeto.',
         points: [
-          'As skills levam para o agente os padrões de arquitetura e de testes do projeto.',
-          'Com esse ambiente, um colega sem experiência em .NET e React contribui no sistema com foco em regras de negócio, banco de dados e testes.',
-          'Reviso todas as entregas antes de irem para produção.',
+          'O ambiente permitiu que pessoas sem experiência na stack contribuíssem com o sistema.',
+          'Todas as entregas passam por revisão de código antes de produção.',
         ],
         tags: ['Claude Code', 'Plugins', 'Skills', 'Revisão de código'],
-        diagrams: [
-          {
-            kind: 'flow',
-            title: 'Fluxo de uma funcionalidade',
-            steps: [
-              { name: '/nova-feature', detail: 'Descrição da demanda' },
-              { name: 'Skills do projeto', detail: 'Arquitetura e convenções' },
-              { name: 'Implementação', detail: 'Código e testes' },
-              { name: 'Revisão', detail: 'Antes de produção' },
-            ],
-          },
-        ],
       },
       items: [],
     },
@@ -191,9 +169,9 @@ export const pt: SiteContent = {
       },
       {
         when: '2022 a 2026',
-        title: 'Estagiária a programadora',
+        title: 'Desenvolvedora de software',
         place: 'Sete Tecnologia',
-        text: 'Efetivada após três meses de estágio e promovida três vezes. Sistemas de controle de acesso integrados a hardware, gestão de processos para prefeituras e ERP interno.',
+        text: 'Desenvolvimento de sistemas de controle de acesso integrados a hardware, de gestão de processos para prefeituras e de um ERP interno.',
       },
       {
         when: 'Graduação',
