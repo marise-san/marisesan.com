@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+---
+<Base lang="pt" path="/404/" title="Página não encontrada | Marise Santana" description="Esta página não existe." ogAlt="Marise Santana">
+  <section class="band">
+    <div class="wrap">
+      <h1>404</h1>
+      <p class="lede">Esta página não existe. This page does not exist.</p>
+      <div class="actions">
+        <Button href="/">Voltar ao início</Button>
+        <Button href="/en/" variant="ghost">Go to home</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  h1 { font-size: clamp(var(--text-4xl), 14vw, 10rem); line-height: 1; margin-bottom: var(--space-5); }
+  .actions { display: flex; gap: var(--space-5); align-items: center; flex-wrap: wrap; margin-top: var(--space-6); }
+</style>

@@ -1,0 +1,31 @@
+---
+import { localePath, otherLang, ui, type Lang } from '../i18n';
+
+interface Props { lang: Lang; path: string }
+const { lang, path } = Astro.props;
+const t = ui[lang];
+const alt = otherLang(lang);
+---
+<footer class="site-footer">
+  <div class="wrap row">
+    <p>© {new Date().getFullYear()} Marise Santana. {t.footerBuilt}</p>
+    <ul>
+      <li><a href={localePath(lang, '/design-system/')}>{t.navDs}</a></li>
+      <li><a href="https://github.com/marise-san/marisesan.com" rel="noopener">{t.footerSource}</a></li>
+      <li><a href={localePath(alt, path)} hreflang={alt} lang={alt}>{t.langSwitch}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+  .row { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; align-items: baseline; }
+  p { margin: 0; }
+  ul { list-style: none; padding: 0; display: flex; gap: var(--space-5); flex-wrap: wrap; }
+  a { color: var(--color-text-muted); }
+</style>

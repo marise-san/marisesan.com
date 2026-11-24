@@ -1,0 +1,23 @@
+---
+/** Quadrado chanfrado na cor neon da área. Identifica a área de atuação. */
+import { kebab, type AreaKey } from '../../design/tokens';
+
+interface Props {
+  area: AreaKey;
+  size?: 'sm' | 'md' | 'lg';
+}
+const { area, size = 'md' } = Astro.props;
+---
+<span class:list={['mark', `mark--${size}`]} style={`--mark: var(--area-${kebab(area)})`} aria-hidden="true"></span>
+
+<style>
+  .mark {
+    display: inline-block;
+    flex: none;
+    background: var(--mark);
+    clip-path: polygon(0 0, 70% 0, 100% 30%, 100% 100%, 0 100%);
+  }
+  .mark--sm { width: 12px; height: 12px; }
+  .mark--md { width: 20px; height: 20px; }
+  .mark--lg { width: 32px; height: 32px; }
+</style>

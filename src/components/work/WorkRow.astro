@@ -1,0 +1,51 @@
+---
+/** Trabalho complementar de uma área, em linha. */
+import type { WorkItem } from '../../content/types';
+import { ui, type Lang } from '../../i18n';
+import Tag from '../ui/Tag.astro';
+
+interface Props { item: WorkItem; lang: Lang }
+const { item, lang } = Astro.props;
+const t = ui[lang];
+---
+<article class="row">
+  <div>
+    <h3>{item.title}</h3>
+    <p class="context">{item.context}</p>
+    {item.status === 'in-progress' && <p class="status">{t.inProgress}</p>}
+  </div>
+  <div>
+    <p class="summary">{item.summary}</p>
+    <ul class="tag-list">{item.tags.map((tag) => <Tag>{tag}</Tag>)}</ul>
+  </div>
+  <div class="link">
+    {item.link && <a href={item.link.href} rel="noopener">{item.link.label}</a>}
+  </div>
+</article>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr) minmax(0, 8rem);
+    gap: var(--space-3) var(--space-7);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  h3 { font-size: var(--text-lg); }
+  .context { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
+  .status {
+    display: inline-block;
+    margin: var(--space-3) 0 0;
+    padding: 2px var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    background: var(--area-ai-products);
+    color: var(--color-text);
+  }
+  .summary { font-size: var(--text-base); margin-bottom: var(--space-4); }
+  .link { text-align: right; font-family: var(--font-display); font-weight: 600; font-size: var(--text-base); }
+  @media (max-width: 820px) {
+    .row { grid-template-columns: 1fr; }
+    .link { text-align: left; }
+  }
+</style>

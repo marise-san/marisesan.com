@@ -1,0 +1,88 @@
+---
+/** Trabalho em destaque de uma área: cartão com canto chanfrado na cor da área. */
+import type { WorkItem } from '../../content/types';
+import { kebab, type AreaKey } from '../../design/tokens';
+import Tag from '../ui/Tag.astro';
+import Button from '../ui/Button.astro';
+
+interface Props { item: WorkItem & { quote?: string }; area: AreaKey }
+const { item, area } = Astro.props;
+---
+<article class="feature" style={`--area: var(--area-${kebab(area)}); --area-deep: var(--area-${kebab(area)}-deep)`}>
+  <div class="card">
+    <div class="head">
+      <p class="context">{item.context}</p>
+      <h3>{item.title}</h3>
+      <p class="summary">{item.summary}</p>
+      {item.quote && <p class="quote">{item.quote}</p>}
+      <ul class="tag-list">{item.tags.map((t) => <Tag>{t}</Tag>)}</ul>
+      {item.link && <div class="cta"><Button href={item.link.href}>{item.link.label}</Button></div>}
+    </div>
+    {item.points && (
+      <ul class="points">
+        {item.points.map((p) => <li>{p}</li>)}
+      </ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .feature { position: relative; }
+  /* O canto cortado do cartão mostra a cor da área. */
+  .feature::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--cut-lg);
+    height: var(--cut-lg);
+    background: var(--area);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(var(--space-5), 4vw, var(--space-8));
+    padding: clamp(var(--space-5), 4vw, var(--space-7));
+    background: var(--color-surface);
+    clip-path: polygon(0 0, calc(100% - var(--cut-lg) - 4px) 0, 100% calc(var(--cut-lg) + 4px), 100% 100%, 0 100%);
+  }
+  .context {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--area-deep);
+    margin-bottom: var(--space-2);
+  }
+  h3 { font-size: clamp(var(--text-xl), 3vw, var(--text-2xl)); font-weight: 700; line-height: 1.1; }
+  .summary { margin-block: var(--space-4) var(--space-5); color: var(--color-text-muted); }
+  .quote {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+    line-height: 1.35;
+    padding-left: var(--space-4);
+    border-left: 4px solid var(--area);
+    margin-bottom: var(--space-5);
+  }
+  .cta { margin-top: var(--space-5); }
+  .points { padding: 0; list-style: none; display: grid; gap: var(--space-4); align-content: start; }
+  .points li {
+    position: relative;
+    padding-left: var(--space-5);
+    font-size: var(--text-base);
+    line-height: 1.55;
+  }
+  .points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 8px;
+    height: 8px;
+    background: var(--area);
+  }
+  @media (max-width: 820px) {
+    .card { grid-template-columns: 1fr; }
+  }
+</style>

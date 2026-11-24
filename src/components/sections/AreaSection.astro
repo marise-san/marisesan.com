@@ -1,0 +1,51 @@
+---
+import type { Area } from '../../content/types';
+import type { Lang } from '../../i18n';
+import { kebab } from '../../design/tokens';
+import AreaMark from '../ui/AreaMark.astro';
+import WorkFeature from '../work/WorkFeature.astro';
+import WorkRow from '../work/WorkRow.astro';
+
+interface Props { area: Area; lang: Lang }
+const { area, lang } = Astro.props;
+const headingId = `${area.id}-title`;
+---
+<section id={area.id} class="area" aria-labelledby={headingId} style={`--area: var(--area-${kebab(area.key)})`}>
+  <div class="wrap">
+    <header class="head">
+      <AreaMark area={area.key} size="lg" />
+      <div>
+        <h2 id={headingId}>{area.name}</h2>
+        <p class="lede">{area.intro}</p>
+      </div>
+    </header>
+
+    {area.featured && <WorkFeature item={area.featured} area={area.key} />}
+
+    {area.items.length > 0 && (
+      <div class="rows">
+        {area.items.map((item) => <WorkRow item={item} lang={lang} />)}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .area { padding-block: clamp(var(--space-8), 8vw, var(--space-9)) 0; }
+  .head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-5);
+    align-items: start;
+    margin-bottom: var(--space-7);
+  }
+  .head :global(.mark) { margin-top: 0.35em; }
+  h2 { font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl)); margin-bottom: var(--space-4); }
+  .lede { margin: 0; }
+  .rows { margin-top: var(--space-7); }
+  @media (max-width: 640px) {
+    .head { grid-template-columns: 1fr; gap: var(--space-3); }
+    .head :global(.mark) { margin-top: 0; }
+  }
+  .rows :global(.row:last-child) { border-bottom: 1px solid var(--color-border); }
+</style>

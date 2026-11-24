@@ -1,0 +1,80 @@
+---
+import { localePath, otherLang, ui, type Lang } from '../i18n';
+
+interface Props { lang: Lang; path: string }
+const { lang, path } = Astro.props;
+const t = ui[lang];
+const home = localePath(lang, '/');
+const alt = otherLang(lang);
+
+const nav = [
+  { href: `${home}#areas`, label: t.navAreas },
+  { href: `${home}#path`, label: t.navPath },
+  { href: `${home}#contact`, label: t.navContact },
+  { href: localePath(lang, '/design-system/'), label: t.navDs },
+];
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href={home}>
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+        <path d="M0 0h24l8 8v24H0z" fill="var(--color-text)" />
+        <path d="M7 23V9l5 8 5-8v14" fill="none" stroke="var(--color-bg)" stroke-width="2.6" stroke-linecap="square" />
+        <path d="M24 0l8 8h-8z" fill="var(--area-ai-assisted)" />
+        <rect x="20" y="20" width="4" height="4" fill="var(--area-software)" />
+        <rect x="24" y="24" width="4" height="4" fill="var(--area-ai-products)" />
+      </svg>
+      <span>Marise Santana</span>
+    </a>
+    <nav aria-label={lang === 'pt' ? 'Principal' : 'Main'}>
+      <ul>
+        {nav.map((item) => (
+          <li><a href={item.href} aria-current={item.href === localePath(lang, path) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+        <li>
+          <a class="lang" href={localePath(alt, path)} hreflang={alt} lang={alt} aria-label={t.langSwitchLabel}>{t.langSwitch}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--color-border); }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    padding-block: var(--space-4);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-md);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-base);
+  }
+  nav a {
+    color: var(--color-text);
+    text-decoration: none;
+    padding-block: var(--space-2);
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover, nav a[aria-current='page'] { border-bottom-color: var(--area-software); }
+  .lang { color: var(--color-text-muted); }
+</style>

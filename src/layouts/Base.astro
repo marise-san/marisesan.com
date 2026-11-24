@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import { tokensToCss, palette } from '../design/tokens';
+import { htmlLang, ogLocale, localePath, locales, defaultLang, ui, type Lang } from '../i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Caminho sem prefixo de idioma, ex.: "/" ou "/design-system/". */
+  path: string;
+  ogAlt: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { lang, title, description, path, ogAlt, jsonLd } = Astro.props;
+const site = Astro.site!;
+const canonical = new URL(localePath(lang, path), site).href;
+const ogImage = new URL(`/og-${lang}.png`, site).href;
+const t = ui[lang];
+---
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Marise Santana" />
+    <meta name="theme-color" content={palette.ink.value} />
+    <link rel="canonical" href={canonical} />
+    {locales.map((l) => (
+      <link rel="alternate" hreflang={htmlLang[l]} href={new URL(localePath(l, path), site).href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(localePath(defaultLang, path), site).href} />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    <meta property="og:site_name" content="Marise Santana" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href="/fonts/chakra-petch-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin />
+
+    <style is:global set:html={tokensToCss()}></style>
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">{t.skip}</a>
+    <Header lang={lang} path={path} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer lang={lang} path={path} />
+  </body>
+</html>

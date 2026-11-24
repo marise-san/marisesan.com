@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://marisesan.com/sitemap-index.xml

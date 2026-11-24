@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/Hero.astro';
+import AreaSection from '../components/sections/AreaSection.astro';
+import Principles from '../components/sections/Principles.astro';
+import Timeline from '../components/sections/Timeline.astro';
+import Stack from '../components/sections/Stack.astro';
+import Contact from '../components/sections/Contact.astro';
+import { getContent } from '../content';
+import { personJsonLd } from '../lib/seo';
+import type { Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const content = getContent(lang);
+---
+<Base
+  lang={lang}
+  path="/"
+  title={content.meta.title}
+  description={content.meta.description}
+  ogAlt={content.meta.ogAlt}
+  jsonLd={personJsonLd(lang, content)}
+>
+  <Hero content={content} />
+  <div id="areas">
+    <h2 class="visually-hidden">{content.areasTitle}</h2>
+    {content.areas.map((area) => <AreaSection area={area} lang={lang} />)}
+  </div>
+  <Principles content={content} />
+  <Timeline content={content} />
+  <Stack content={content} />
+  <Contact content={content} />
+</Base>

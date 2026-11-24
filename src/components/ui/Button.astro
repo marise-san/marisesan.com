@@ -1,0 +1,54 @@
+---
+/**
+ * Botão-link com canto chanfrado.
+ * primary: tinta sobre fundo claro. neon: para fundos invertidos. ghost: ação secundária.
+ */
+interface Props {
+  href: string;
+  variant?: 'primary' | 'neon' | 'ghost';
+  external?: boolean;
+}
+const { href, variant = 'primary', external = false } = Astro.props;
+---
+<a
+  class:list={['btn', `btn--${variant}`]}
+  href={href}
+  {...(external ? { rel: 'me noopener', target: '_blank' } : {})}
+>
+  <slot />
+</a>
+
+<style>
+  .btn {
+    --cut: var(--cut-sm);
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: var(--space-3) var(--space-5);
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+    transition: background-color var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+  }
+  .btn:focus-visible { clip-path: none; }
+
+  .btn--primary { background: var(--color-text); color: var(--color-bg); }
+  .btn--primary:hover { background: var(--area-ai-assisted-deep); }
+
+  .btn--neon { background: var(--area-software); color: var(--color-text); }
+  .btn--neon:hover { background: var(--area-ai-products); }
+
+  .btn--ghost {
+    color: var(--color-text);
+    padding-inline: var(--space-2);
+    clip-path: none;
+    text-decoration: underline;
+    text-decoration-color: var(--area-software);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.35em;
+  }
+  .btn--ghost:hover { text-decoration-color: var(--area-ai-assisted); }
+</style>

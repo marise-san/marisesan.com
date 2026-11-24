@@ -1,0 +1,53 @@
+---
+import type { SiteContent } from '../../content/types';
+
+interface Props { content: SiteContent }
+const { timeline } = Astro.props.content;
+---
+<section id="path" class="band" aria-labelledby="path-title">
+  <div class="wrap layout">
+    <h2 id="path-title">{timeline.title}</h2>
+    <ol class="timeline">
+      {timeline.items.map((item) => (
+        <li>
+          <p class="when">{item.when}</p>
+          <div>
+            <h3>{item.title}</h3>
+            <p class="place">{item.place}</p>
+            <p class="text">{item.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .band { padding-top: 0; }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    gap: var(--space-7);
+  }
+  .timeline { list-style: none; padding: 0; }
+  li {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-5);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  li:first-child { border-top: 3px solid var(--color-text); }
+  .when {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-base);
+    margin: 0;
+  }
+  .place { font-size: var(--text-sm); color: var(--color-text-muted); margin: var(--space-1) 0 var(--space-3); }
+  .text { font-size: var(--text-base); margin: 0; }
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: 1fr; gap: var(--space-5); }
+    li { grid-template-columns: 1fr; gap: var(--space-2); }
+  }
+</style>
