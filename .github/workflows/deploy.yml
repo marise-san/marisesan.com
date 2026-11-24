@@ -25,7 +25,8 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # Ative criando a variável de repositório DEPLOY_ENABLED=true e os secrets VPS_HOST, VPS_USER e VPS_SSH_KEY.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: production
     steps:

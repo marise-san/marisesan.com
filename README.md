@@ -50,40 +50,31 @@ npm run build    # gera dist/
 
 ## Publicação na VPS
 
-O workflow `.github/workflows/deploy.yml` valida e compila a cada push e, na `main`, publica `dist/` na VPS por rsync.
+### Primeira instalação
 
-### Na VPS (uma vez)
+No console da VPS (Ubuntu), como root:
 
 ```bash
-sudo apt update && sudo apt install -y nginx certbot python3-certbot-nginx rsync
-sudo mkdir -p /var/www/marisesan.com && sudo chown -R $USER:$USER /var/www/marisesan.com
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/marisesan.com
-sudo ln -s /etc/nginx/sites-available/marisesan.com /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
+curl -fsSL https://raw.githubusercontent.com/marise-san/marisesan.com/main/deploy/setup-vps.sh -o setup-vps.sh && bash setup-vps.sh
 ```
 
-### DNS
+O script para sem alterar nada se as portas 80/443 já estiverem em uso por outro serviço. Se tudo der certo, ele instala nginx, Node.js 22 e certbot, compila o site e publica em `/var/www/marisesan.com`.
+
+### DNS e HTTPS
 
 No hPanel da Hostinger: desconecte o domínio do Website Builder e aponte os registros `A` de `@` e `www` para o IP da VPS. Depois que propagar:
 
 ```bash
-sudo certbot --nginx -d marisesan.com -d www.marisesan.com
+certbot --nginx -d marisesan.com -d www.marisesan.com --redirect
 ```
 
-### Deploy automático
+### Atualizações
 
 ```bash
-ssh-keygen -t ed25519 -f deploy_key -N "" -C "github-actions"
-cat deploy_key.pub >> ~/.ssh/authorized_keys   # na VPS
+bash /opt/marisesan.com/deploy/update.sh
 ```
 
-Em **Settings > Secrets and variables > Actions** do repositório:
-
-| Secret | Valor |
-|---|---|
-| `VPS_HOST` | IP da VPS |
-| `VPS_USER` | usuário SSH |
-| `VPS_SSH_KEY` | conteúdo de `deploy_key` (chave privada) |
+Para publicar automaticamente a cada push na `main`, crie a variável de repositório `DEPLOY_ENABLED=true` e os secrets `VPS_HOST`, `VPS_USER` e `VPS_SSH_KEY` (chave privada de um par cuja chave pública esteja em `~/.ssh/authorized_keys` na VPS).
 
 ### Depois de publicar
 
